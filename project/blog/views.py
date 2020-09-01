@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Signup,Newblog
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 import pdb
 def signup(request):
 	if request.method=='POST':
@@ -26,6 +27,7 @@ def login(request):
 	else:
 		return render(request,'login.html')
 
+
 def newblog(request):
 	if request.method=='POST':
 		new=Newblog(blogname=request.POST['blogname'],description=request.POST['description'])
@@ -40,5 +42,16 @@ def logout(request):
 	return redirect('login')
 
 def home(request):
-	return HttpResponse('home')
+	name=[]
+	l=Newblog.objects.values('id')
+	q=len(l)
+	i=1
+	while i<=q:
+		n=Newblog.objects.get(id=i)
+		context={'id':n.id,'blogname':n.blogname,'description':n.description}
+		name.append(context)
+		i=i+1
+	return render(request,'home.html',{'name': name})
+
+
 
