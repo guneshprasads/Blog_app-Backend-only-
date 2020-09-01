@@ -12,3 +12,6 @@ class Signup(models.Model):
 class Newblog(models.Model):
 	blogname = models.CharField(max_length=20)
 	description = models.TextField()
+
+	def __str__(self):
+		return self.blogname
